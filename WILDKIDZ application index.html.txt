@@ -1,0 +1,3227 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WILDKIDZ — Official Application Portal | WOWLD Entertainment</title>
+  <meta name="description" content="Official International Audition & Recruitment Portal for WILDKIDZ under WOWLD Entertainment." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-void: #0D0E12;
+      --bg-gunmetal: #17191F;
+      --bg-steel: #21242D;
+      --glass-surface: rgba(34, 37, 46, 0.44);
+      --glass-elevated: rgba(46, 50, 62, 0.52);
+      --glass-spine: rgba(20, 22, 28, 0.58);
+      --glass-hud: rgba(16, 18, 23, 0.62);
+      --glass-border-top: rgba(255, 255, 255, 0.28);
+      --glass-border-side: rgba(226, 232, 240, 0.14);
+      --glass-border-bottom: rgba(0, 0, 0, 0.48);
+      --glass-blur: blur(22px) saturate(165%);
+      --silver-100: #F8FAFC;
+      --silver-200: #E2E8F0;
+      --silver-300: #CBD5E1;
+      --silver-400: #94A3B8;
+      --silver-500: #64748B;
+      --crimson: #E11D48;
+      --crimson-glow: rgba(225, 29, 72, 0.42);
+      --burgundy: #7F1D1D;
+      --burgundy-deep: #4C0519;
+      --chrome-grad: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 26%, #64748B 50%, #F1F5F9 74%, #94A3B8 100%);
+      --spine-w: 54px;
+      --hud-h: 58px;
+      --dock-h: 68px;
+    }
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: var(--bg-void);
+      background-image:
+        radial-gradient(circle at 18% 20%, rgba(148, 163, 184, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 84% 78%, rgba(127, 29, 29, 0.22) 0%, transparent 48%),
+        linear-gradient(160deg, #0B0C10 0%, #16181E 48%, #0E1015 100%);
+      color: var(--silver-100);
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+
+    /* Interactive Full-Bleed Canvas Starfield */
+    #starfieldCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+
+    /* Subtle Brushed Grain & Horizon Glow */
+    .ambient-horizon {
+      position: fixed;
+      top: -18vh;
+      right: -12vw;
+      width: 58vw;
+      height: 58vw;
+      max-width: 720px;
+      max-height: 720px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow:
+        inset 0 0 70px rgba(255, 255, 255, 0.06),
+        0 0 90px rgba(225, 29, 72, 0.08);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+
+    /* Chrome Metallic Typography */
+    .chrome-text {
+      background: var(--chrome-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 2px 24px rgba(255, 255, 255, 0.14);
+    }
+
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.12em;
+    }
+
+
+    .display-font {
+      font-family: 'Syne', sans-serif;
+    }
+
+
+    /* Left Fixed AREA ONE CD Spine Rail (54px) */
+    .cd-spine {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: var(--spine-w);
+      z-index: 40;
+      background: var(--glass-spine);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-right: 1px solid var(--glass-border-top);
+      box-shadow:
+        inset -1px 0 0 rgba(255, 255, 255, 0.16),
+        4px 0 28px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      user-select: none;
+    }
+
+
+    .spine-globe {
+      width: 24px;
+      height: 24px;
+      opacity: 0.85;
+    }
+
+
+    .spine-label-wrap {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      color: var(--silver-300);
+      text-transform: uppercase;
+    }
+
+
+    .spine-track-gauge {
+      width: 3px;
+      height: 110px;
+      background: rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+
+    .spine-track-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0%;
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--crimson) 100%);
+      box-shadow: 0 0 10px var(--crimson-glow);
+      transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+
+    .spine-barcode {
+      width: 22px;
+      height: 36px;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.75) 0px,
+        rgba(255, 255, 255, 0.75) 1.5px,
+        transparent 1.5px,
+        transparent 4px,
+        rgba(255, 255, 255, 0.45) 4px,
+        rgba(255, 255, 255, 0.45) 5px,
+        transparent 5px,
+        transparent 7px
+      );
+      opacity: 0.7;
+    }
+
+
+    /* Top Sleek Liquid Glass HUD Bar */
+    .top-hud {
+      position: fixed;
+      top: 0;
+      left: var(--spine-w);
+      right: 0;
+      height: var(--hud-h);
+      z-index: 35;
+      background: var(--glass-hud);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border-side);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+    }
+
+
+    .hud-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+
+    .hud-brand-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+
+    .hud-brand-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--silver-400);
+      text-transform: uppercase;
+    }
+
+
+    .hud-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+
+    .hud-pill-btn {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid rgba(255, 255, 255, 0.32);
+      border-left: 1px solid rgba(255, 255, 255, 0.18);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+      color: var(--silver-100);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+
+    .hud-pill-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-top-color: #FFFFFF;
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.14);
+    }
+
+
+    .hud-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--crimson);
+      box-shadow: 0 0 8px var(--crimson);
+    }
+
+
+    /* Main Workspace Offset by Spine & HUD */
+    .portal-shell {
+      position: relative;
+      z-index: 10;
+      margin-left: var(--spine-w);
+      padding-top: var(--hud-h);
+      padding-bottom: calc(var(--dock-h) + 28px);
+      min-height: 100vh;
+    }
+
+
+    /* Stage Transition Wrapper */
+    .stage-view {
+      display: none;
+      animation: stageReveal 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+
+    .stage-view.active {
+      display: block;
+    }
+
+
+    @keyframes stageReveal {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+
+    /* HERO / LANDING SHOWCASE (STAGE 00) */
+    .hero-showcase {
+      min-height: calc(100vh - var(--hud-h) - var(--dock-h));
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      align-items: center;
+      gap: 36px;
+      padding: 36px 48px;
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px;
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--silver-200);
+      margin-bottom: 22px;
+    }
+
+
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.6rem, 5.4vw, 5.1rem);
+      line-height: 0.96;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--silver-300);
+      max-width: 540px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+    }
+
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+
+    .btn-liquid-primary {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(148, 163, 184, 0.14) 50%, rgba(127, 29, 29, 0.34) 100%);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+      border-top: 1px solid rgba(255, 255, 255, 0.55);
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+      border-bottom: 1px solid rgba(225, 29, 72, 0.55);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 15px 28px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.28s ease;
+    }
+
+
+    .btn-liquid-primary:hover {
+      transform: translateY(-2px);
+      border-top-color: #FFFFFF;
+      box-shadow:
+        0 14px 36px rgba(225, 29, 72, 0.26),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    }
+
+
+    .btn-liquid-secondary {
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      color: var(--silver-200);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 15px 22px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+
+    .btn-liquid-secondary:hover {
+      background: var(--glass-elevated);
+      color: #FFFFFF;
+    }
+
+
+    .hero-meta-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(20, 22, 28, 0.35);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+
+    .hero-meta-cell {
+      padding: 14px 16px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+
+    .hero-meta-cell:last-child {
+      border-right: none;
+    }
+
+
+    .hero-meta-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      color: var(--silver-400);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+
+    .hero-meta-v {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--silver-100);
+      text-transform: uppercase;
+    }
+
+
+    /* 3D Tilt Liquid-Chrome Crest + Spinning CD Showcase */
+    .crest-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 410px;
+      perspective: 1000px;
+    }
+
+
+    .crest-glass-plate {
+      position: relative;
+      width: 340px;
+      height: 340px;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(30, 33, 42, 0.42) 55%, rgba(127, 29, 29, 0.18) 100%);
+      backdrop-filter: blur(24px) saturate(175%);
+      -webkit-backdrop-filter: blur(24px) saturate(175%);
+      border-top: 1px solid rgba(255, 255, 255, 0.38);
+      border-left: 1px solid rgba(255, 255, 255, 0.24);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+      box-shadow:
+        0 28px 65px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out;
+    }
+
+
+    .spinning-disc {
+      position: absolute;
+      right: -46px;
+      bottom: -32px;
+      width: 158px;
+      height: 158px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #0D0E12 0%, #0D0E12 18%, rgba(255, 255, 255, 0.45) 19%, rgba(255, 255, 255, 0.12) 22%, transparent 23%),
+        conic-gradient(
+          from 0deg,
+          rgba(255, 255, 255, 0.32),
+          rgba(100, 116, 139, 0.18),
+          rgba(255, 255, 255, 0.48),
+          rgba(225, 29, 72, 0.22),
+          rgba(148, 163, 184, 0.2),
+          rgba(255, 255, 255, 0.32)
+        );
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+      animation: discSpin 14s linear infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .spinning-disc-label {
+      position: absolute;
+      top: 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      letter-spacing: 0.22em;
+      color: #FFFFFF;
+      text-transform: uppercase;
+    }
+
+
+    @keyframes discSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+
+    /* ASYMMETRIC SPLIT-SCREEN EDITORIAL DOSSIER SPREAD (STAGES 01 - 14) */
+    .dossier-spread {
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 36px 48px;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 44px;
+      align-items: start;
+    }
+
+
+    .dossier-left-rail {
+      position: sticky;
+      top: calc(var(--hud-h) + 28px);
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      box-shadow:
+        0 20px 44px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.26);
+      padding: 26px 24px;
+    }
+
+
+    .dossier-stage-num {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 64px;
+      line-height: 0.9;
+      letter-spacing: -0.04em;
+      margin-bottom: 14px;
+    }
+
+
+    .dossier-stage-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      color: var(--crimson);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+
+    .dossier-stage-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+
+    .dossier-stage-desc {
+      font-size: 13px;
+      color: var(--silver-300);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+
+    .dossier-hud-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--silver-400);
+    }
+
+
+    /* Right Open Editorial Dossier Rows */
+    .dossier-right-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+
+    .dossier-row {
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.34),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      padding: 20px 24px;
+      transition: border-color 0.25s ease, background 0.25s ease;
+    }
+
+
+    .dossier-row:focus-within {
+      background: var(--glass-elevated);
+      border-top-color: rgba(255, 255, 255, 0.55);
+      border-bottom-color: rgba(225, 29, 72, 0.55);
+    }
+
+
+    .dossier-row-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+
+    .field-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+
+    .field-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--silver-100);
+    }
+
+
+    .field-req {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--crimson);
+      text-transform: uppercase;
+    }
+
+
+    .field-opt {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      color: var(--silver-400);
+      text-transform: uppercase;
+    }
+
+
+    .glass-input, .glass-textarea, .glass-select {
+      width: 100%;
+      background: rgba(13, 14, 18, 0.48);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255, 255, 255, 0.16);
+      border-left: 1px solid rgba(255, 255, 255, 0.1);
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+      color: #FFFFFF;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+
+    .glass-input::placeholder, .glass-textarea::placeholder {
+      color: rgba(148, 163, 184, 0.55);
+    }
+
+
+    .glass-input:focus, .glass-textarea:focus, .glass-select:focus {
+      background: rgba(22, 25, 34, 0.72);
+      border-bottom-color: var(--crimson);
+      box-shadow: 0 4px 18px rgba(225, 29, 72, 0.16);
+    }
+
+
+    .glass-textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+
+    .glass-textarea.long-essay {
+      min-height: 165px;
+    }
+
+
+    /* Multi-Select Role Tiles (Stage 02) */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+
+    .role-tile {
+      position: relative;
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      padding: 20px 18px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 112px;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+
+
+    .role-tile:hover {
+      background: var(--glass-elevated);
+      transform: translateY(-2px);
+    }
+
+
+    .role-tile.selected {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.16) 0%, rgba(127, 29, 29, 0.34) 100%);
+      border-top-color: #FFFFFF;
+      border-bottom-color: var(--crimson);
+      box-shadow:
+        0 10px 26px rgba(225, 29, 72, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
+
+
+    .role-tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+
+    .role-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--silver-400);
+    }
+
+
+    .role-check {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: transparent;
+      transition: all 0.2s ease;
+    }
+
+
+    .role-tile.selected .role-check {
+      background: var(--crimson);
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+    }
+
+
+    .role-name {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #FFFFFF;
+    }
+
+
+    /* Media & Audition Upload Bays (Stages 06 & 11) */
+    .media-bay {
+      background: rgba(15, 17, 22, 0.52);
+      border: 1px dashed rgba(255, 255, 255, 0.28);
+      padding: 18px;
+      margin-top: 10px;
+      transition: all 0.25s ease;
+    }
+
+
+    .media-bay:hover {
+      border-color: rgba(255, 255, 255, 0.55);
+      background: rgba(24, 27, 35, 0.62);
+    }
+
+
+    .media-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+
+    .btn-mini-glass {
+      background: rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.32);
+      border-left: 1px solid rgba(255, 255, 255, 0.18);
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+      color: #FFFFFF;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 13px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .btn-mini-glass:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+
+    .btn-mini-danger {
+      background: rgba(127, 29, 29, 0.42);
+      border: 1px solid rgba(225, 29, 72, 0.45);
+      color: #FECDD3;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 13px;
+      cursor: pointer;
+    }
+
+
+    .preview-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(10, 11, 15, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+
+    .preview-box video, .preview-box audio {
+      width: 100%;
+      margin-top: 8px;
+      outline: none;
+    }
+
+
+    .photo-preview-frame {
+      width: 190px;
+      height: 230px;
+      background: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+
+    .photo-preview-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+
+    /* Editorial Manifesto Lists (Stages 09 & 10) */
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+
+    .manifesto-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+
+    .manifesto-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--silver-200);
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+
+    .manifesto-banner {
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(127, 29, 29, 0.32) 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.36);
+      border-bottom: 1px solid rgba(225, 29, 72, 0.5);
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      color: #FFFFFF;
+    }
+
+
+    /* FAQ Accordion (Stage 13) */
+    .faq-item {
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+    }
+
+
+    .faq-trigger {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: #FFFFFF;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      text-align: left;
+      cursor: pointer;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+
+    .faq-answer {
+      display: none;
+      padding: 0 22px 18px 22px;
+      font-size: 13.5px;
+      color: var(--silver-300);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 14px;
+      line-height: 1.6;
+    }
+
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      color: var(--crimson);
+    }
+
+
+    .faq-icon {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      color: var(--silver-300);
+      transition: transform 0.25s ease;
+    }
+
+
+    /* Review Cards (Stage 14) */
+    .review-block {
+      background: var(--glass-surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      padding: 18px 22px;
+    }
+
+
+    .review-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+
+    .review-kv {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 10px;
+      font-size: 13px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+
+    .review-k {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--silver-400);
+      text-transform: uppercase;
+    }
+
+
+    .review-v {
+      color: var(--silver-100);
+      word-break: break-word;
+    }
+
+
+    /* Bottom Full-Bleed Liquid Glass Navigation Dock */
+    .bottom-dock {
+      position: fixed;
+      bottom: 0;
+      left: var(--spine-w);
+      right: 0;
+      height: var(--dock-h);
+      z-index: 35;
+      background: var(--glass-hud);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-top: 1px solid var(--glass-border-top);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+    }
+
+
+    .dock-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--silver-300);
+      text-transform: uppercase;
+    }
+
+
+    .dock-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+
+    /* CD-Backcover Tracklist Drawer Overlay */
+    .tracklist-drawer {
+      position: fixed;
+      inset: 0;
+      left: var(--spine-w);
+      z-index: 50;
+      background: rgba(11, 12, 16, 0.84);
+      backdrop-filter: blur(28px) saturate(180%);
+      -webkit-backdrop-filter: blur(28px) saturate(180%);
+      display: none;
+      flex-direction: column;
+      padding: 28px 42px;
+      overflow-y: auto;
+    }
+
+
+    .tracklist-drawer.open {
+      display: flex;
+      animation: stageReveal 0.3s ease forwards;
+    }
+
+
+    .tracklist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+
+    .track-item {
+      background: var(--glass-surface);
+      border-top: 1px solid var(--glass-border-top);
+      border-left: 1px solid var(--glass-border-side);
+      border-right: 1px solid var(--glass-border-side);
+      border-bottom: 1px solid var(--glass-border-bottom);
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+
+    .track-item:hover, .track-item.current {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(127, 29, 29, 0.32));
+      border-top-color: #FFFFFF;
+    }
+
+
+    /* Validation Toast */
+    .toast-banner {
+      position: fixed;
+      top: calc(var(--hud-h) + 14px);
+      right: 24px;
+      z-index: 60;
+      max-width: 380px;
+      background: rgba(76, 5, 25, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      border-bottom: 1px solid var(--crimson);
+      padding: 14px 18px;
+      color: #FFFFFF;
+      font-size: 12.5px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55);
+      display: none;
+    }
+
+
+    .toast-banner.show {
+      display: block;
+      animation: stageReveal 0.25s ease forwards;
+    }
+
+
+    /* Confirmation Star Animation */
+    .confirm-star-spin {
+      animation: starPulseRotate 8s linear infinite;
+      filter: drop-shadow(0 0 22px rgba(255, 255, 255, 0.35));
+    }
+
+
+    @keyframes starPulseRotate {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+
+    /* Mobile Responsive Tuning */
+    @media (max-width: 960px) {
+      :root {
+        --spine-w: 38px;
+        --hud-h: 54px;
+        --dock-h: 64px;
+      }
+
+
+      .hero-showcase {
+        grid-template-columns: 1fr;
+        padding: 24px 20px;
+        gap: 28px;
+      }
+
+
+      .crest-stage {
+        min-height: 290px;
+      }
+
+
+      .crest-glass-plate {
+        width: 250px;
+        height: 250px;
+      }
+
+
+      .spinning-disc {
+        width: 112px;
+        height: 112px;
+        right: -18px;
+        bottom: -18px;
+      }
+
+
+      .dossier-spread {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+        gap: 18px;
+      }
+
+
+      .dossier-left-rail {
+        position: relative;
+        top: 0;
+        padding: 18px;
+      }
+
+
+      .dossier-stage-num {
+        font-size: 44px;
+      }
+
+
+      .dossier-row-grid-2, .manifesto-grid, .hero-meta-strip {
+        grid-template-columns: 1fr;
+      }
+
+
+      .review-kv {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+
+      .top-hud, .bottom-dock {
+        padding: 0 12px;
+      }
+
+
+      .hud-brand-sub {
+        display: none;
+      }
+
+
+      .tracklist-drawer {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- Interactive Floating 4-Point Silver & Crimson Starfield -->
+  <canvas id="starfieldCanvas"></canvas>
+  <div class="ambient-horizon"></div>
+
+
+  <!-- Left Fixed AREA ONE CD Spine Rail -->
+  <aside class="cd-spine" aria-label="AREA ONE CD Spine">
+    <svg class="spine-globe" viewBox="0 0 32 32" fill="none" stroke="rgba(255,255,255,0.78)" stroke-width="1.2">
+      <circle cx="16" cy="16" r="13" />
+      <ellipse cx="16" cy="16" rx="6.5" ry="13" />
+      <line x1="3" y1="16" x2="29" y2="16" />
+      <line x1="5" y1="10" x2="27" y2="10" />
+      <line x1="5" y1="22" x2="27" y2="22" />
+    </svg>
+
+
+    <div class="spine-label-wrap">
+      <span>WILDKIDZ</span>
+      <span>//</span>
+      <span>AREA ONE</span>
+      <span>//</span>
+      <span>WOWLD ENT.</span>
+    </div>
+
+
+    <div class="spine-track-gauge" title="Application Progress">
+      <div class="spine-track-fill" id="spineProgressFill"></div>
+    </div>
+
+
+    <div class="spine-barcode" aria-hidden="true"></div>
+  </aside>
+
+
+  <!-- Top Sleek Liquid Glass HUD Header -->
+  <header class="top-hud">
+    <div class="hud-brand" onclick="goToStage(0)">
+      <svg width="20" height="20" viewBox="0 0 32 32" fill="none">
+        <path d="M16 1L19.2 12.8L31 16L19.2 19.2L16 31L12.8 19.2L1 16L12.8 12.8L16 1Z" fill="url(#hudStarGrad)" />
+        <defs>
+          <linearGradient id="hudStarGrad" x1="0" y1="0" x2="32" y2="32">
+            <stop offset="0%" stop-color="#FFFFFF" />
+            <stop offset="50%" stop-color="#94A3B8" />
+            <stop offset="100%" stop-color="#E11D48" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <div>
+        <div class="hud-brand-title chrome-text">WILDKIDZ</div>
+        <div class="hud-brand-sub">WOWLD ENTERTAINMENT // CASTING</div>
+      </div>
+    </div>
+
+
+    <div class="hud-actions">
+      <button type="button" class="hud-pill-btn" onclick="toggleTracklist(true)">
+        <span class="hud-dot"></span>
+        <span>TRACKLIST [00–14]</span>
+      </button>
+    </div>
+  </header>
+
+
+  <!-- Validation / Status Notification Toast -->
+  <div class="toast-banner" id="toastBanner" role="alert"></div>
+
+
+  <!-- CD-Backcover Tracklist / Stage Navigator Drawer -->
+  <div class="tracklist-drawer" id="tracklistDrawer">
+    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(255,255,255,0.16); padding-bottom:16px;">
+      <div>
+        <div class="mono" style="font-size:10px; color:var(--crimson);">WOWLD ENTERTAINMENT // ARCHIVE INDEX</div>
+        <h2 class="display-font chrome-text" style="font-size:24px; text-transform:uppercase; margin-top:4px;">AREA ONE — APPLICATION TRACKLIST</h2>
+      </div>
+      <button type="button" class="hud-pill-btn" onclick="toggleTracklist(false)">CLOSE [ESC]</button>
+    </div>
+    <div class="tracklist-grid" id="tracklistGrid"></div>
+  </div>
+
+
+  <!-- MAIN APPLICATION PORTAL SHELL -->
+  <main class="portal-shell">
+    <form id="wildkidzForm" novalidate>
+
+
+      <!-- STAGE 00: PORTAL OVERVIEW / CONCEPT SHOWCASE -->
+      <section class="stage-view active" data-stage="0">
+        <div class="hero-showcase">
+          <div>
+            <div class="hero-eyebrow">
+              <span class="hud-dot"></span>
+              <span>WOWLD ENTERTAINMENT // GLOBAL RECRUITMENT</span>
+            </div>
+            <h1 class="hero-title chrome-text">WILDKIDZ<br/>OFFICIAL<br/>PORTAL</h1>
+            <p class="hero-subtitle">
+              An international entertainment project built around creativity, performance, individuality, and global collaboration. Complete the 14-stage agency dossier to submit your audition directly to WOWLD Entertainment.
+            </p>
+            <div class="hero-cta-row">
+              <button type="button" class="btn-liquid-primary" onclick="goToStage(1)">
+                <span>BEGIN APPLICATION</span>
+                <span>→</span>
+              </button>
+              <button type="button" class="btn-liquid-secondary" onclick="goToStage(9)">
+                <span>ABOUT WILDKIDZ</span>
+              </button>
+              <button type="button" class="btn-liquid-secondary" onclick="goToStage(13)">
+                <span>FAQ</span>
+              </button>
+            </div>
+
+
+            <div class="hero-meta-strip">
+              <div class="hero-meta-cell">
+                <div class="hero-meta-k">PROJECT</div>
+                <div class="hero-meta-v">WILDKIDZ (GLOBAL)</div>
+              </div>
+              <div class="hero-meta-cell">
+                <div class="hero-meta-k">ORGANISATION</div>
+                <div class="hero-meta-v">WOWLD ENTERTAINMENT</div>
+              </div>
+              <div class="hero-meta-cell">
+                <div class="hero-meta-k">SUBMISSION FEE</div>
+                <div class="hero-meta-v">FREE // NO FEE</div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- 3D Tilt Liquid-Chrome Crest & Spinning Mini-Disc -->
+          <div class="crest-stage">
+            <div class="crest-glass-plate" id="tiltCrest">
+              <svg width="240" height="240" viewBox="0 0 260 260" fill="none">
+                <defs>
+                  <linearGradient id="liquidChromeStar" x1="20" y1="20" x2="240" y2="240" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="28%" stop-color="#CBD5E1" />
+                    <stop offset="52%" stop-color="#475569" />
+                    <stop offset="76%" stop-color="#F8FAFC" />
+                    <stop offset="100%" stop-color="#94A3B8" />
+                  </linearGradient>
+                  <linearGradient id="crimsonOrb" x1="0" y1="130" x2="260" y2="130" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="rgba(255,255,255,0.7)" />
+                    <stop offset="50%" stop-color="#E11D48" />
+                    <stop offset="100%" stop-color="rgba(255,255,255,0.7)" />
+                  </linearGradient>
+                </defs>
+                <!-- Wireframe Globe -->
+                <circle cx="130" cy="130" r="78" stroke="rgba(255,255,255,0.28)" stroke-width="1" />
+                <ellipse cx="130" cy="130" rx="38" ry="78" stroke="rgba(255,255,255,0.22)" stroke-width="1" />
+                <ellipse cx="130" cy="130" rx="78" ry="32" stroke="rgba(255,255,255,0.22)" stroke-width="1" />
+                <!-- Orbital Ring -->
+                <ellipse cx="130" cy="130" rx="116" ry="38" transform="rotate(-24 130 130)" stroke="url(#crimsonOrb)" stroke-width="1.6" />
+                <!-- Cyber-Sigilism 4-Point Chrome Star -->
+                <path d="M130 14 L144 114 L246 130 L144 146 L130 246 L116 146 L14 130 L116 114 Z" fill="url(#liquidChromeStar)" />
+                <path d="M130 34 L138 122 L226 130 L138 138 L130 226 L122 138 L34 130 L122 122 Z" fill="rgba(15,17,22,0.45)" />
+                <circle cx="218" cy="84" r="4.5" fill="#FFFFFF" />
+                <circle cx="44" cy="176" r="3.5" fill="#E11D48" />
+              </svg>
+
+
+              <div class="spinning-disc" aria-hidden="true">
+                <span class="spinning-disc-label">WILDKIDZ // AREA ONE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 01 — PROFILE -->
+      <section class="stage-view" data-stage="1">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 01 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">01</div>
+            <h2 class="dossier-stage-title">PROFILE</h2>
+            <p class="dossier-stage-desc">Core applicant identification, contact credentials, and international language profile.</p>
+            <div class="dossier-hud-footer">
+              <span>WOWLD // ID-01</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="fullName">1. Full Name</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="fullName" name="fullName" placeholder="Legal full name" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="preferredName">2. Preferred Name</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="preferredName" name="preferredName" placeholder="Stage name or preferred name" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="age">3. Age</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="number" id="age" name="age" min="10" max="45" placeholder="Your current age" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="dob">4. Date of Birth</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="date" id="dob" name="dob" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="email">5. Email Address</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <input class="glass-input" type="email" id="email" name="email" placeholder="applicant@example.com" required />
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="country">6. Country of Residence</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="country" name="country" placeholder="e.g., South Korea, South Africa, UK, Brazil" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="languages">7. Languages Spoken</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="languages" name="languages" placeholder="e.g., English, Korean, Spanish" required />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 02 — CATEGORY -->
+      <section class="stage-view" data-stage="2">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 02 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">02</div>
+            <h2 class="dossier-stage-title">CATEGORY</h2>
+            <p class="dossier-stage-desc">Select one or more performance positions you are auditioning for within WILDKIDZ.</p>
+            <div class="dossier-hud-footer">
+              <span>MULTI-SELECT</span>
+              <span id="selectedCategoryCount">0 SELECTED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="role-grid" id="categoryGrid">
+              <div class="role-tile" data-role="Vocalist" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 01</span><span class="role-check">✓</span></div>
+                <div class="role-name">Vocalist</div>
+              </div>
+              <div class="role-tile" data-role="Rapper" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 02</span><span class="role-check">✓</span></div>
+                <div class="role-name">Rapper</div>
+              </div>
+              <div class="role-tile" data-role="All-rounder" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 03</span><span class="role-check">✓</span></div>
+                <div class="role-name">All-rounder</div>
+              </div>
+              <div class="role-tile" data-role="Dancer" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 04</span><span class="role-check">✓</span></div>
+                <div class="role-name">Dancer</div>
+              </div>
+              <div class="role-tile" data-role="Visual" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 05</span><span class="role-check">✓</span></div>
+                <div class="role-name">Visual</div>
+              </div>
+              <div class="role-tile" data-role="Lead vocalist" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 06</span><span class="role-check">✓</span></div>
+                <div class="role-name">Lead vocalist</div>
+              </div>
+              <div class="role-tile" data-role="Leader" onclick="toggleRole(this)">
+                <div class="role-tile-top"><span class="role-code">POS // 07</span><span class="role-check">✓</span></div>
+                <div class="role-name">Leader</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 03 — INFORMATION -->
+      <section class="stage-view" data-stage="3">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 03 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">03</div>
+            <h2 class="dossier-stage-title">INFORMATION</h2>
+            <p class="dossier-stage-desc">Background in performance, practice duration, formal or self-directed training, and notable milestones.</p>
+            <div class="dossier-hud-footer">
+              <span>EXPERIENCE LOG</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="prevExp">1. Do you have previous performance experience?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <select class="glass-select" id="prevExp" name="prevExp" required>
+                  <option value="">Select an option...</option>
+                  <option value="Yes — Stage / Live Events">Yes — Stage / Live Events</option>
+                  <option value="Yes — Online / Digital Content">Yes — Online / Digital Content</option>
+                  <option value="Yes — School / Local Competitions">Yes — School / Local Competitions</option>
+                  <option value="No — Beginning my journey">No — Beginning my journey</option>
+                </select>
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="practiceDuration">2. How long have you practised your main talent?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="practiceDuration" name="practiceDuration" placeholder="e.g., 2 years, 6 months" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="trainingHistory">3. Have you received any training?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="trainingHistory" name="trainingHistory" placeholder="Detail any vocal, dance, rap, theatre, or self-taught training..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="performedBefore">4. Have you performed before?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="performedBefore" name="performedBefore" placeholder="Share details of live stages, showcases, covers, or state if this is your first audition..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="strongestSkills">5. What are your strongest skills?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="strongestSkills" name="strongestSkills" placeholder="List your standout technical or artistic abilities..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="achievements">6. Do you have any achievements?</label>
+                <span class="field-opt">OPTIONAL / IF ANY</span>
+              </div>
+              <textarea class="glass-textarea" id="achievements" name="achievements" placeholder="Awards, competitions, leadership roles, or personal milestones..."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 04 — ABOUT YOU -->
+      <section class="stage-view" data-stage="4">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 04 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">04</div>
+            <h2 class="dossier-stage-title">ABOUT YOU</h2>
+            <p class="dossier-stage-desc">Character profile, individuality, core strengths, and artistic drive.</p>
+            <div class="dossier-hud-footer">
+              <span>IDENTITY DOSSIER</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="introSelf">1. Introduce yourself.</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="introSelf" name="introSelf" placeholder="Tell WOWLD Entertainment who you are..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="personality">2. How would you describe your personality?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="personality" name="personality" placeholder="Describe your energy, mindset, and how you work with others..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="uniqueTrait">3. What makes you unique?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="uniqueTrait" name="uniqueTrait" placeholder="What sets your presence, tone, or artistry apart?" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="personalStrengths">4. What are your strengths?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="personalStrengths" name="personalStrengths" placeholder="Your personal and creative strengths..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="ambitions">5. What are your biggest ambitions?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="ambitions" name="ambitions" placeholder="Where do you aim to grow as an artist and teammate?" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="oneThing">6. What is one thing you would like people to know about you?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="oneThing" name="oneThing" placeholder="Share a defining fact, value, or story..." required></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 05 — YOUR INTERESTS -->
+      <section class="stage-view" data-stage="5">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 05 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">05</div>
+            <h2 class="dossier-stage-title">YOUR INTERESTS</h2>
+            <p class="dossier-stage-desc">Creative passions, hobbies, artistic inspirations, and skills you want to explore.</p>
+            <div class="dossier-hud-footer">
+              <span>CREATIVE PROFILE</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="mainInterests">1. What are your main interests and hobbies?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="mainInterests" name="mainInterests" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="freeTime">2. What do you enjoy doing in your free time?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="freeTime" name="freeTime" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="creativeActivities">3. Are you interested in music, dancing, acting, modelling or other creative activities?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="creativeActivities" name="creativeActivities" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="creativeInspiration">4. What inspires you creatively?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="creativeInspiration" name="creativeInspiration" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="outsidePassion">5. What are you passionate about outside entertainment?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea" id="outsidePassion" name="outsidePassion" required></textarea>
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="favMusicType">6. What is your favourite type of music?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="favMusicType" name="favMusicType" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="exploreSkills">7. What other creative skills would you like to explore?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="exploreSkills" name="exploreSkills" placeholder="e.g., songwriting, choreography, producing" required />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 06 — MUSIC PROFILE & TEST -->
+      <section class="stage-view" data-stage="6">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 06 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">06</div>
+            <h2 class="dossier-stage-title">MUSIC PROFILE & TEST</h2>
+            <p class="dossier-stage-desc">Musical influences plus optional singing, rap, dance, or performance audition recordings or links.</p>
+            <div class="dossier-hud-footer">
+              <span>AUDIO / VISUAL</span>
+              <span>TEST OPTIONAL</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="favArtists">1. Who are your favourite music artists?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="favArtists" name="favArtists" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="favGroups">2. What are your favourite music groups?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="favGroups" name="favGroups" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="musicGenres">3. What genres of music do you enjoy?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="musicGenres" name="musicGenres" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="favSong">4. What is your favourite song?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="favSong" name="favSong" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="perfStyleInspo">5. Which artist inspires your performance style?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <input class="glass-input" type="text" id="perfStyleInspo" name="perfStyleInspo" required />
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="instruments">6. Do you play any musical instruments?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="instruments" name="instruments" placeholder="List instruments or state None" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="canPerform">7. Can you sing, rap, dance or perform?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="canPerform" name="canPerform" placeholder="e.g., Sing & Dance, All four, Rap" required />
+              </div>
+            </div>
+
+
+            <!-- MUSIC TEST OPTIONAL SUBMISSION AREA -->
+            <div class="dossier-row">
+              <div class="field-header">
+                <span class="field-label" style="color:#FFFFFF;">MUSIC TEST — OPTIONAL AUDITION SUBMISSIONS</span>
+                <span class="field-opt">SUBMIT FILES OR LINKS (NOT ALL REQUIRED)</span>
+              </div>
+              <p style="font-size:12.5px; color:var(--silver-300); margin-bottom:14px;">
+                Upload recordings directly or paste unlisted YouTube, Google Drive, SoundCloud, or TikTok performance links. You only need to submit the categories relevant to you.
+              </p>
+
+
+              <!-- 1. Singing Recording -->
+              <div class="media-bay" id="bay-singing">
+                <div class="field-header">
+                  <span class="field-label">A. Singing Recording (Audio / Video or Link)</span>
+                  <span class="field-opt">OPTIONAL</span>
+                </div>
+                <input class="glass-input" type="url" id="link-singing" placeholder="Paste singing video/audio link (optional)" oninput="updateMediaLink('singing')" />
+                <div class="media-controls-row">
+                  <input type="file" id="file-singing" accept="audio/*,video/*" style="display:none" onchange="handleMediaUpload('singing', this)" />
+                  <button type="button" class="btn-mini-glass" onclick="document.getElementById('file-singing').click()">UPLOAD SINGING FILE</button>
+                  <button type="button" class="btn-mini-danger" id="remove-singing" style="display:none" onclick="clearMedia('singing')">REMOVE</button>
+                </div>
+                <div class="preview-box" id="preview-singing" style="display:none"></div>
+              </div>
+
+
+              <!-- 2. Rap Recording -->
+              <div class="media-bay" id="bay-rap">
+                <div class="field-header">
+                  <span class="field-label">B. Rap Recording (Audio / Video or Link)</span>
+                  <span class="field-opt">OPTIONAL</span>
+                </div>
+                <input class="glass-input" type="url" id="link-rap" placeholder="Paste rap video/audio link (optional)" oninput="updateMediaLink('rap')" />
+                <div class="media-controls-row">
+                  <input type="file" id="file-rap" accept="audio/*,video/*" style="display:none" onchange="handleMediaUpload('rap', this)" />
+                  <button type="button" class="btn-mini-glass" onclick="document.getElementById('file-rap').click()">UPLOAD RAP FILE</button>
+                  <button type="button" class="btn-mini-danger" id="remove-rap" style="display:none" onclick="clearMedia('rap')">REMOVE</button>
+                </div>
+                <div class="preview-box" id="preview-rap" style="display:none"></div>
+              </div>
+
+
+              <!-- 3. Dance Video -->
+              <div class="media-bay" id="bay-dance">
+                <div class="field-header">
+                  <span class="field-label">C. Dance Video (Video or Link)</span>
+                  <span class="field-opt">OPTIONAL</span>
+                </div>
+                <input class="glass-input" type="url" id="link-dance" placeholder="Paste dance performance link (optional)" oninput="updateMediaLink('dance')" />
+                <div class="media-controls-row">
+                  <input type="file" id="file-dance" accept="video/*" style="display:none" onchange="handleMediaUpload('dance', this)" />
+                  <button type="button" class="btn-mini-glass" onclick="document.getElementById('file-dance').click()">UPLOAD DANCE VIDEO</button>
+                  <button type="button" class="btn-mini-danger" id="remove-dance" style="display:none" onclick="clearMedia('dance')">REMOVE</button>
+                </div>
+                <div class="preview-box" id="preview-dance" style="display:none"></div>
+              </div>
+
+
+              <!-- 4. Other Performance Video -->
+              <div class="media-bay" id="bay-other">
+                <div class="field-header">
+                  <span class="field-label">D. Other Performance Video (Video or Link)</span>
+                  <span class="field-opt">OPTIONAL</span>
+                </div>
+                <input class="glass-input" type="url" id="link-other" placeholder="Paste freestyle, instrument, or stage clip link (optional)" oninput="updateMediaLink('other')" />
+                <div class="media-controls-row">
+                  <input type="file" id="file-other" accept="audio/*,video/*" style="display:none" onchange="handleMediaUpload('other', this)" />
+                  <button type="button" class="btn-mini-glass" onclick="document.getElementById('file-other').click()">UPLOAD PERFORMANCE FILE</button>
+                  <button type="button" class="btn-mini-danger" id="remove-other" style="display:none" onclick="clearMedia('other')">REMOVE</button>
+                </div>
+                <div class="preview-box" id="preview-other" style="display:none"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 07 — PHYSICAL & PERSONAL DETAILS -->
+      <section class="stage-view" data-stage="7">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 07 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">07</div>
+            <h2 class="dossier-stage-title">PHYSICAL & PERSONAL DETAILS</h2>
+            <p class="dossier-stage-desc">Performance formation planning details. Height is completely optional and never used as a rejection criterion.</p>
+            <div class="dossier-hud-footer">
+              <span>FORMATION DATA</span>
+              <span>HEIGHT OPTIONAL</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="heightCm">1. Height (cm)</label>
+                  <span class="field-opt">OPTIONAL — FORMATION PLANNING ONLY</span>
+                </div>
+                <input class="glass-input" type="number" id="heightCm" name="heightCm" min="120" max="230" placeholder="e.g., 172 (Optional)" />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="detailCountry">2. Country</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="detailCountry" name="detailCountry" placeholder="Confirm your country" required />
+              </div>
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="detailLanguages">3. Languages Spoken</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="detailLanguages" name="detailLanguages" placeholder="Confirm languages spoken" required />
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="preferredCategory">4. Preferred Performance Category</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <input class="glass-input" type="text" id="preferredCategory" name="preferredCategory" placeholder="Your primary focus role" required />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 08 — WHY WILDKIDZ? -->
+      <section class="stage-view" data-stage="8">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 08 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">08</div>
+            <h2 class="dossier-stage-title">WHY WILDKIDZ?</h2>
+            <p class="dossier-stage-desc">Three focused long-form questions exploring your motivation, vision, and team contribution.</p>
+            <div class="dossier-hud-footer">
+              <span>MOTIVATION ESSAYS</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="whyApply">1. Why did you apply for WILDKIDZ?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea long-essay" id="whyApply" name="whyApply" placeholder="Share your genuine motivation for applying to WILDKIDZ..." required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="whatInterested">2. What made you interested in joining WILDKIDZ?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea long-essay" id="whatInterested" name="whatInterested" placeholder="What stood out to you about the project, concept, or global vision?" required></textarea>
+            </div>
+
+
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="teamContribution">3. What do you believe you could contribute to the team?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <textarea class="glass-textarea long-essay" id="teamContribution" name="teamContribution" placeholder="Describe the energy, talent, leadership, or creativity you bring to WILDKIDZ..." required></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 09 — ABOUT WILDKIDZ -->
+      <section class="stage-view" data-stage="9">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 09 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">09</div>
+            <h2 class="dossier-stage-title">ABOUT WILDKIDZ</h2>
+            <p class="dossier-stage-desc">Official project overview, creative vision, and core qualities we seek in future members.</p>
+            <div class="dossier-hud-footer">
+              <span>PROJECT BRIEF</span>
+              <span>WILDKIDZ</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <p style="font-size:16px; color:#FFFFFF; font-weight:500; margin-bottom:12px;">
+                WILDKIDZ is an international entertainment project built around creativity, performance, individuality and collaboration.
+              </p>
+              <p style="font-size:14.5px; color:var(--silver-300); line-height:1.7;">
+                The project aims to bring together talented individuals from different backgrounds and countries to develop their abilities, share ideas and create something meaningful together.
+              </p>
+            </div>
+
+
+            <div class="manifesto-grid">
+              <div class="dossier-row">
+                <div class="field-label" style="color:var(--crimson);">OUR VISION</div>
+                <ul class="manifesto-list">
+                  <li><span>✦</span><span>International collaboration.</span></li>
+                  <li><span>✦</span><span>Music and performance.</span></li>
+                  <li><span>✦</span><span>Creativity and originality.</span></li>
+                  <li><span>✦</span><span>Individuality and confidence.</span></li>
+                  <li><span>✦</span><span>Teamwork and dedication.</span></li>
+                </ul>
+              </div>
+
+
+              <div class="dossier-row">
+                <div class="field-label" style="color:var(--crimson);">WHAT WE LOOK FOR</div>
+                <ul class="manifesto-list">
+                  <li><span>✦</span><span>Passion.</span></li>
+                  <li><span>✦</span><span>Creativity.</span></li>
+                  <li><span>✦</span><span>Dedication.</span></li>
+                  <li><span>✦</span><span>Respect.</span></li>
+                  <li><span>✦</span><span>Willingness to learn.</span></li>
+                </ul>
+              </div>
+            </div>
+
+
+            <div class="manifesto-banner">WELCOME TO WILDKIDZ.</div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 10 — ABOUT WOWLD ENTERTAINMENT -->
+      <section class="stage-view" data-stage="10">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 10 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">10</div>
+            <h2 class="dossier-stage-title">WOWLD ENTERTAINMENT</h2>
+            <p class="dossier-stage-desc">A WORLD OF POSSIBILITIES. The parent creative organisation behind the WILDKIDZ project.</p>
+            <div class="dossier-hud-footer">
+              <span>ORGANISATION</span>
+              <span>WOWLD ENT.</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="mono" style="font-size:11px; color:var(--crimson); margin-bottom:6px;">A WORLD OF POSSIBILITIES.</div>
+              <h3 class="display-font chrome-text" style="font-size:28px; text-transform:uppercase; margin-bottom:14px;">WOWLD ENTERTAINMENT</h3>
+              <p style="font-size:15px; color:var(--silver-200); line-height:1.7;">
+                WOWLD Entertainment is the creative organisation behind WILDKIDZ, focused on developing an international entertainment project through talent, creativity and collaboration. While WOWLD Entertainment serves as the creative organisation and production umbrella, WILDKIDZ is its flagship international performance and music project.
+              </p>
+            </div>
+
+
+            <div class="manifesto-grid">
+              <div class="dossier-row">
+                <div class="field-label" style="color:var(--crimson);">OUR PURPOSE</div>
+                <ul class="manifesto-list">
+                  <li><span>✦</span><span>Discover emerging talent.</span></li>
+                  <li><span>✦</span><span>Create opportunities for performers.</span></li>
+                  <li><span>✦</span><span>Encourage creative expression.</span></li>
+                  <li><span>✦</span><span>Develop international connections.</span></li>
+                  <li><span>✦</span><span>Build original entertainment projects.</span></li>
+                </ul>
+              </div>
+
+
+              <div class="dossier-row">
+                <div class="field-label" style="color:var(--crimson);">OUR VALUES</div>
+                <ul class="manifesto-list">
+                  <li><span>✦</span><span>Creativity.</span></li>
+                  <li><span>✦</span><span>Dedication.</span></li>
+                  <li><span>✦</span><span>Respect.</span></li>
+                  <li><span>✦</span><span>Teamwork.</span></li>
+                  <li><span>✦</span><span>Individuality.</span></li>
+                </ul>
+              </div>
+            </div>
+
+
+            <div class="manifesto-banner">WELCOME TO OUR WORLD.</div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 11 — VISUAL SUBMISSION -->
+      <section class="stage-view" data-stage="11">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 11 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">11</div>
+            <h2 class="dossier-stage-title">VISUAL SUBMISSION</h2>
+            <p class="dossier-stage-desc">Optional profile photograph upload with studio-white background recommendations and AI backdrop assistance.</p>
+            <div class="dossier-hud-footer">
+              <span>OPTIONAL STAGE</span>
+              <span>SKIP AVAILABLE</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="field-header">
+                <span class="field-label">PROFILE PHOTOGRAPH RECOMMENDATIONS</span>
+                <span class="field-opt">COMPLETELY OPTIONAL</span>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin:12px 0 18px 0;">
+                <div style="padding:10px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); font-size:12px;">✦ White background</div>
+                <div style="padding:10px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); font-size:12px;">✦ Clear lighting</div>
+                <div style="padding:10px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); font-size:12px;">✦ Face visible</div>
+                <div style="padding:10px 12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14); font-size:12px;">✦ No heavy filters</div>
+              </div>
+
+
+              <div class="media-controls-row">
+                <input type="file" id="photoUploadInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this)" />
+                <button type="button" class="btn-liquid-primary" onclick="document.getElementById('photoUploadInput').click()">UPLOAD PHOTOGRAPH</button>
+                <button type="button" class="btn-mini-glass" id="replacePhotoBtn" style="display:none" onclick="document.getElementById('photoUploadInput').click()">REPLACE</button>
+                <button type="button" class="btn-mini-glass" id="aiBgBtn" style="display:none" onclick="applyAiWhiteBackdrop()">AI WHITE BACKGROUND ASSISTANCE</button>
+                <button type="button" class="btn-mini-danger" id="removePhotoBtn" style="display:none" onclick="removePhoto()">REMOVE</button>
+                <button type="button" class="btn-liquid-secondary" onclick="goToStage(12)">SKIP THIS STEP →</button>
+              </div>
+
+
+              <div id="photoPreviewArea" style="display:none; margin-top:16px;">
+                <div class="photo-preview-frame">
+                  <img id="photoPreviewImg" alt="Applicant Profile Preview" />
+                </div>
+                <p id="aiBgStatus" style="font-size:11.5px; color:var(--silver-300); margin-top:8px;">
+                  Original photograph loaded. Optional AI background assistance brightens studio backdrop tones without altering your facial features.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 12 — AVAILABILITY -->
+      <section class="stage-view" data-stage="12">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 12 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">12</div>
+            <h2 class="dossier-stage-title">AVAILABILITY</h2>
+            <p class="dossier-stage-desc">Schedule commitment, remote collaboration readiness, and minor guardian verification.</p>
+            <div class="dossier-hud-footer">
+              <span>LOGISTICS</span>
+              <span>REQUIRED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row">
+              <div class="field-header">
+                <label class="field-label" for="timeDedication">1. How much time can you dedicate?</label>
+                <span class="field-req">REQUIRED</span>
+              </div>
+              <input class="glass-input" type="text" id="timeDedication" name="timeDedication" placeholder="e.g., 10–15 hours per week, evenings & weekends" required />
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="onlineMeetings">2. Are you available for online meetings?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <select class="glass-select" id="onlineMeetings" name="onlineMeetings" required>
+                  <option value="">Select...</option>
+                  <option value="Yes">Yes</option>
+                  <option value="Yes — Flexible with time zones">Yes — Flexible with time zones</option>
+                  <option value="Limited availability">Limited availability</option>
+                </select>
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="workInternational">3. Are you comfortable working internationally?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <select class="glass-select" id="workInternational" name="workInternational" required>
+                  <option value="">Select...</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+
+
+            <div class="dossier-row dossier-row-grid-2">
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="reliableInternet">4. Do you have reliable internet access?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <select class="glass-select" id="reliableInternet" name="reliableInternet" required>
+                  <option value="">Select...</option>
+                  <option value="Yes">Yes</option>
+                  <option value="Mostly / Mobile Data">Mostly / Mobile Data</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <div class="field-header">
+                  <label class="field-label" for="parentalPermission">5. Do you have parental/guardian permission if under 18?</label>
+                  <span class="field-req">REQUIRED</span>
+                </div>
+                <select class="glass-select" id="parentalPermission" name="parentalPermission" required>
+                  <option value="">Select...</option>
+                  <option value="Yes — I have full parental/guardian permission">Yes — I have full parental/guardian permission</option>
+                  <option value="Not applicable — I am 18 or older">Not applicable — I am 18 or older</option>
+                  <option value="No — Not yet obtained">No — Not yet obtained</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 13 — HAVE QUESTIONS? (FAQ) -->
+      <section class="stage-view" data-stage="13">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 13 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">13</div>
+            <h2 class="dossier-stage-title">HAVE QUESTIONS?</h2>
+            <p class="dossier-stage-desc">Official recruitment guidelines and direct agency contact support.</p>
+            <div class="dossier-hud-footer">
+              <span>OFFICIAL SUPPORT</span>
+              <span>FAQ [10]</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows">
+            <div class="dossier-row" style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px;">
+              <div>
+                <div class="mono" style="font-size:10px; color:var(--crimson);">OFFICIAL CONTACT EMAIL</div>
+                <div style="font-size:16px; font-weight:600; color:#FFFFFF; margin-top:4px;">wildkidz1001@gmail.com</div>
+              </div>
+              <a href="mailto:wildkidz1001@gmail.com" class="btn-mini-glass" style="text-decoration:none;">CONTACT WOWLD ENTERTAINMENT</a>
+            </div>
+
+
+            <div id="faqContainer" style="display:flex; flex-direction:column; gap:10px;"></div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- STAGE 14 — FINAL SUBMISSION & REVIEW -->
+      <section class="stage-view" data-stage="14">
+        <div class="dossier-spread">
+          <div class="dossier-left-rail">
+            <div class="dossier-stage-tag"><span class="hud-dot"></span><span>STAGE 14 / 14</span></div>
+            <div class="dossier-stage-num chrome-text">14</div>
+            <h2 class="dossier-stage-title">FINAL SUBMISSION</h2>
+            <p class="dossier-stage-desc">Verify your completed dossier, edit any section, and transmit directly to WOWLD Entertainment.</p>
+            <div class="dossier-hud-footer">
+              <span>DEST: WILDKIDZ1001</span>
+              <span>ENCRYPTED</span>
+            </div>
+          </div>
+
+
+          <div class="dossier-right-rows" id="reviewStageContainer">
+            <div id="reviewSummaryList" style="display:flex; flex-direction:column; gap:14px;"></div>
+
+
+            <div class="dossier-row">
+              <label style="display:flex; align-items:flex-start; gap:12px; cursor:pointer; font-size:13.5px; color:var(--silver-200);">
+                <input type="checkbox" id="confirmAccuracy" style="margin-top:4px; accent-color:var(--crimson); width:16px; height:16px;" />
+                <span>
+                  I confirm that all information provided in this WILDKIDZ application is accurate, and if I am under 18 years of age, I have obtained full parental or legal guardian consent to apply and participate under WOWLD Entertainment's youth protection standards.
+                </span>
+              </label>
+
+
+              <div style="margin-top:20px; display:flex; flex-wrap:wrap; align-items:center; gap:14px;">
+                <button type="button" class="btn-liquid-primary" id="finalSubmitBtn" onclick="submitApplication()">
+                  <span>SUBMIT APPLICATION TO WOWLD ENTERTAINMENT</span>
+                  <span>✦</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- POST-SUBMISSION CONFIRMATION SCREEN -->
+          <div class="dossier-right-rows" id="confirmationScreen" style="display:none;">
+            <div class="dossier-row" style="text-align:center; padding:44px 28px;">
+              <svg class="confirm-star-spin" width="84" height="84" viewBox="0 0 100 100" fill="none" style="margin:0 auto 22px auto; display:block;">
+                <path d="M50 4L58 42L96 50L58 58L50 96L42 58L4 50L42 42L50 4Z" fill="url(#hudStarGrad)" />
+              </svg>
+              <div class="mono" style="font-size:11px; color:var(--crimson); margin-bottom:10px;" id="refIdDisplay">REF // WK-2026</div>
+              <h2 class="display-font chrome-text" style="font-size:32px; text-transform:uppercase; margin-bottom:14px;">APPLICATION RECEIVED.</h2>
+              <p style="font-size:16px; color:#FFFFFF; font-weight:500; margin-bottom:10px;">
+                Thank you for your interest in WILDKIDZ.
+              </p>
+              <p style="font-size:14px; color:var(--silver-300); max-width:540px; margin:0 auto 28px auto; line-height:1.65;">
+                Your application has been successfully submitted. WOWLD Entertainment will review your application and contact you using the email provided.
+              </p>
+              <button type="button" class="btn-liquid-primary" onclick="resetAndReturnHome()">
+                <span>RETURN TO HOME</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+    </form>
+  </main>
+
+
+  <!-- Bottom Full-Bleed Liquid Glass Navigation Dock -->
+  <nav class="bottom-dock" aria-label="Stage Navigation">
+    <div class="dock-status" id="dockStatusLabel">STAGE 00 // PORTAL OVERVIEW</div>
+    <div class="dock-btn-group">
+      <button type="button" class="btn-liquid-secondary" id="prevBtn" onclick="prevStage()" style="padding:10px 18px; display:none;">← PREVIOUS</button>
+      <button type="button" class="btn-liquid-primary" id="nextBtn" onclick="nextStage()" style="padding:10px 22px;">NEXT STAGE →</button>
+    </div>
+  </nav>
+
+
+  <script>
+    /* =========================================================================
+       1. STAGE METADATA & TRACKLIST
+       ========================================================================= */
+    const STAGES = [
+      { num: '00', title: 'PORTAL OVERVIEW', tag: 'SHOWCASE' },
+      { num: '01', title: 'PROFILE', tag: 'IDENTITY' },
+      { num: '02', title: 'CATEGORY', tag: 'ROLES' },
+      { num: '03', title: 'INFORMATION', tag: 'EXPERIENCE' },
+      { num: '04', title: 'ABOUT YOU', tag: 'CHARACTER' },
+      { num: '05', title: 'YOUR INTERESTS', tag: 'CREATIVE' },
+      { num: '06', title: 'MUSIC PROFILE & TEST', tag: 'AUDITION' },
+      { num: '07', title: 'PHYSICAL & PERSONAL DETAILS', tag: 'PLANNING' },
+      { num: '08', title: 'WHY WILDKIDZ?', tag: 'ESSAYS' },
+      { num: '09', title: 'ABOUT WILDKIDZ', tag: 'PROJECT' },
+      { num: '10', title: 'ABOUT WOWLD ENTERTAINMENT', tag: 'AGENCY' },
+      { num: '11', title: 'VISUAL SUBMISSION', tag: 'OPTIONAL' },
+      { num: '12', title: 'AVAILABILITY', tag: 'LOGISTICS' },
+      { num: '13', title: 'HAVE QUESTIONS?', tag: 'FAQ' },
+      { num: '14', title: 'FINAL SUBMISSION', tag: 'REVIEW' }
+    ];
+
+
+    const FAQ_DATA = [
+      { q: '1. Who can apply?', a: 'Aspiring singers, rappers, dancers, all-rounders, visuals, and leaders from anywhere in the world who are passionate about music, performance, and international teamwork.' },
+      { q: '2. Is previous experience required?', a: 'No. Both experienced performers and dedicated beginners with raw potential and strong willingness to learn are welcome to apply.' },
+      { q: '3. Can I apply for multiple categories?', a: 'Yes. In Stage 02 (Category), you can select as many roles as match your abilities—including Vocalist, Rapper, All-rounder, Dancer, Visual, Lead vocalist, and Leader.' },
+      { q: '4. Can international applicants join?', a: 'Yes. WILDKIDZ is an international entertainment project welcoming applicants from all countries and linguistic backgrounds.' },
+      { q: '5. Is there an application deadline?', a: 'Applications are reviewed on a rolling basis by WOWLD Entertainment until the global lineup is finalized. Early submissions are encouraged.' },
+      { q: '6. What happens after submission?', a: 'Authorised WOWLD Entertainment reviewers evaluate your profile, essays, and any submitted audition recordings or links. Shortlisted candidates are contacted for live online auditions.' },
+      { q: '7. Will I receive email confirmation?', a: 'Yes. Once your application is dispatched, you receive a unique Application Reference ID on screen, and WOWLD Entertainment will contact you via the email address you provided.' },
+      { q: '8. Can I update my application?', a: 'You can review and edit every section directly in Stage 14 before final submission. If you need to update an already-submitted file, email wildkidz1001@gmail.com with your Reference ID.' },
+      { q: '9. Do applicants under 18 need parental permission?', a: 'Yes. Applicants under 18 must have explicit parental or legal guardian consent to apply and participate. Minor applicant data is restricted strictly to authorised reviewers.' },
+      { q: '10. Is there an application fee?', a: 'No. Applying to WILDKIDZ and WOWLD Entertainment is 100% free. Never pay any third party claiming to represent the project.' }
+    ];
+
+
+    let currentStage = 0;
+    const selectedRoles = new Set();
+    const mediaState = {
+      singing: { link: '', fileName: '', fileObj: null },
+      rap: { link: '', fileName: '', fileObj: null },
+      dance: { link: '', fileName: '', fileObj: null },
+      other: { link: '', fileName: '', fileObj: null }
+    };
+    let photoDataUrl = '';
+    let photoEnhanced = false;
+
+
+    /* =========================================================================
+       2. INITIALIZE TRACKLIST & FAQ ACCORDION
+       ========================================================================= */
+    function initPortal() {
+      const trackGrid = document.getElementById('tracklistGrid');
+      trackGrid.innerHTML = STAGES.map((s, idx) => `
+        <div class="track-item ${idx === 0 ? 'current' : ''}" id="track-item-${idx}" onclick="goToStage(${idx}); toggleTracklist(false);">
+          <div>
+            <div class="mono" style="font-size:10px; color:var(--crimson);">TRACK ${s.num} // ${s.tag}</div>
+            <div style="font-weight:600; font-size:13px; color:#FFFFFF; margin-top:3px;">${s.title}</div>
+          </div>
+          <span class="mono" style="font-size:11px; color:var(--silver-400);">→</span>
+        </div>
+      `).join('');
+
+
+      const faqContainer = document.getElementById('faqContainer');
+      faqContainer.innerHTML = FAQ_DATA.map((item, i) => `
+        <div class="faq-item" id="faq-${i}">
+          <button type="button" class="faq-trigger" onclick="toggleFaq(${i})">
+            <span>${item.q}</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">${item.a}</div>
+        </div>
+      `).join('');
+
+
+      updateNavigationUI();
+    }
+
+
+    function toggleFaq(index) {
+      document.getElementById(`faq-${index}`).classList.toggle('open');
+    }
+
+
+    function toggleTracklist(forceState) {
+      const drawer = document.getElementById('tracklistDrawer');
+      if (typeof forceState === 'boolean') {
+        drawer.classList.toggle('open', forceState);
+      } else {
+        drawer.classList.toggle('open');
+      }
+    }
+
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') toggleTracklist(false);
+    });
+
+
+    /* =========================================================================
+       3. MULTI-STAGE NAVIGATION & VALIDATION
+       ========================================================================= */
+    function showToast(msg) {
+      const toast = document.getElementById('toastBanner');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => toast.classList.remove('show'), 4200);
+    }
+
+
+    function validateStage(stageIndex) {
+      if (stageIndex === 2) {
+        if (selectedRoles.size === 0) {
+          showToast('Please select at least one performance category in Stage 02.');
+          return false;
+        }
+        return true;
+      }
+
+
+      const section = document.querySelector(`.stage-view[data-stage="${stageIndex}"]`);
+      if (!section) return true;
+
+
+      const requiredFields = section.querySelectorAll('[required]');
+      for (const field of requiredFields) {
+        if (!field.value.trim()) {
+          field.focus();
+          showToast('Please complete all required fields in this stage before continuing.');
+          return false;
+        }
+        if (field.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())) {
+          field.focus();
+          showToast('Please enter a valid email address so WOWLD Entertainment can contact you.');
+          return false;
+        }
+      }
+
+
+      if (stageIndex === 1) {
+        const ageVal = parseInt(document.getElementById('age').value, 10);
+        if (isNaN(ageVal) || ageVal < 10 || ageVal > 45) {
+          document.getElementById('age').focus();
+          showToast('Please enter a valid age.');
+          return false;
+        }
+      }
+
+
+      if (stageIndex === 12) {
+        const ageVal = parseInt(document.getElementById('age').value, 10);
+        const permVal = document.getElementById('parentalPermission').value;
+        if (ageVal < 18 && permVal !== 'Yes — I have full parental/guardian permission') {
+          showToast('Applicants under 18 must confirm parental/guardian permission before submitting.');
+          return false;
+        }
+      }
+
+
+      return true;
+    }
+
+
+    function goToStage(targetIndex) {
+      if (targetIndex < 0 || targetIndex >= STAGES.length) return;
+
+
+      // Sync helpful fields between Stage 01 & Stage 07 if empty
+      if (targetIndex === 7) {
+        const c1 = document.getElementById('country').value;
+        const l1 = document.getElementById('languages').value;
+        if (c1 && !document.getElementById('detailCountry').value) document.getElementById('detailCountry').value = c1;
+        if (l1 && !document.getElementById('detailLanguages').value) document.getElementById('detailLanguages').value = l1;
+        if (selectedRoles.size > 0 && !document.getElementById('preferredCategory').value) {
+          document.getElementById('preferredCategory').value = Array.from(selectedRoles).join(', ');
+        }
+      }
+
+
+      if (targetIndex === 14) {
+        buildReviewSummary();
+      }
+
+
+      document.querySelectorAll('.stage-view').forEach(el => el.classList.remove('active'));
+      const targetEl = document.querySelector(`.stage-view[data-stage="${targetIndex}"]`);
+      if (targetEl) targetEl.classList.add('active');
+
+
+      currentStage = targetIndex;
+      updateNavigationUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+
+    function nextStage() {
+      if (currentStage === 0) {
+        goToStage(1);
+        return;
+      }
+      if (!validateStage(currentStage)) return;
+      if (currentStage < STAGES.length - 1) {
+        goToStage(currentStage + 1);
+      }
+    }
+
+
+    function prevStage() {
+      if (currentStage > 0) {
+        goToStage(currentStage - 1);
+      }
+    }
+
+
+    function updateNavigationUI() {
+      const info = STAGES[currentStage];
+      document.getElementById('dockStatusLabel').textContent = `STAGE ${info.num} // ${info.title}`;
+      document.getElementById('prevBtn').style.display = currentStage > 0 ? 'inline-flex' : 'none';
+      document.getElementById('nextBtn').style.display = currentStage < STAGES.length - 1 ? 'inline-flex' : 'none';
+      document.getElementById('nextBtn').innerHTML = currentStage === 0 ? '<span>START AUDITION</span><span>→</span>' : '<span>NEXT STAGE</span><span>→</span>';
+
+
+      const pct = Math.round((currentStage / (STAGES.length - 1)) * 100);
+      document.getElementById('spineProgressFill').style.height = `${pct}%`;
+
+
+      document.querySelectorAll('.track-item').forEach((el, idx) => {
+        el.classList.toggle('current', idx === currentStage);
+      });
+    }
+
+
+    /* =========================================================================
+       4. ROLE SELECTION, MEDIA & PHOTO HANDLERS
+       ========================================================================= */
+    function toggleRole(tile) {
+      const role = tile.getAttribute('data-role');
+      if (selectedRoles.has(role)) {
+        selectedRoles.delete(role);
+        tile.classList.remove('selected');
+      } else {
+        selectedRoles.add(role);
+        tile.classList.add('selected');
+      }
+      document.getElementById('selectedCategoryCount').textContent = `${selectedRoles.size} SELECTED`;
+    }
+
+
+    function updateMediaLink(type) {
+      const linkVal = document.getElementById(`link-${type}`).value.trim();
+      mediaState[type].link = linkVal;
+      renderMediaPreview(type);
+    }
+
+
+    function handleMediaUpload(type, input) {
+      const file = input.files[0];
+      if (!file) return;
+      mediaState[type].fileName = file.name;
+      mediaState[type].fileObj = file;
+      renderMediaPreview(type, URL.createObjectURL(file));
+    }
+
+
+    function renderMediaPreview(type, objectUrl) {
+      const box = document.getElementById(`preview-${type}`);
+      const removeBtn = document.getElementById(`remove-${type}`);
+      const state = mediaState[type];
+
+
+      if (!state.link && !state.fileName) {
+        box.style.display = 'none';
+        removeBtn.style.display = 'none';
+        box.innerHTML = '';
+        return;
+      }
+
+
+      removeBtn.style.display = 'inline-block';
+      box.style.display = 'block';
+      let html = '';
+
+
+      if (state.fileName && objectUrl) {
+        const isVideo = state.fileObj && state.fileObj.type.startsWith('video/');
+        html += `<div class="mono" style="font-size:10px; color:#FFFFFF;">ATTACHED FILE: ${escapeHtml(state.fileName)}</div>`;
+        html += isVideo
+          ? `<video controls src="${objectUrl}"></video>`
+          : `<audio controls src="${objectUrl}"></audio>`;
+      }
+
+
+      if (state.link) {
+        html += `<div class="mono" style="font-size:10px; color:var(--silver-300); margin-top:6px;">EXTERNAL LINK: <a href="${escapeHtml(state.link)}" target="_blank" rel="noopener" style="color:#FFFFFF;">${escapeHtml(state.link)}</a></div>`;
+      }
+
+
+      box.innerHTML = html;
+    }
+
+
+    function clearMedia(type) {
+      mediaState[type] = { link: '', fileName: '', fileObj: null };
+      document.getElementById(`link-${type}`).value = '';
+      document.getElementById(`file-${type}`).value = '';
+      renderMediaPreview(type);
+    }
+
+
+    function handlePhotoUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        photoDataUrl = e.target.result;
+        photoEnhanced = false;
+        const img = document.getElementById('photoPreviewImg');
+        img.style.filter = 'none';
+        img.src = photoDataUrl;
+        document.getElementById('photoPreviewArea').style.display = 'block';
+        document.getElementById('replacePhotoBtn').style.display = 'inline-block';
+        document.getElementById('aiBgBtn').style.display = 'inline-block';
+        document.getElementById('removePhotoBtn').style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    }
+
+
+    function applyAiWhiteBackdrop() {
+      const img = document.getElementById('photoPreviewImg');
+      photoEnhanced = !photoEnhanced;
+      img.style.filter = photoEnhanced ? 'brightness(1.12) contrast(1.06) saturate(0.95)' : 'none';
+      document.getElementById('aiBgStatus').textContent = photoEnhanced
+        ? 'AI Studio-White Backdrop Assistance active: lighting balanced for clean white background clarity without altering your appearance.'
+        : 'Original photograph restored.';
+    }
+
+
+    function removePhoto() {
+      photoDataUrl = '';
+      photoEnhanced = false;
+      document.getElementById('photoUploadInput').value = '';
+      document.getElementById('photoPreviewArea').style.display = 'none';
+      document.getElementById('replacePhotoBtn').style.display = 'none';
+      document.getElementById('aiBgBtn').style.display = 'none';
+      document.getElementById('removePhotoBtn').style.display = 'none';
+    }
+
+
+    /* =========================================================================
+       5. STAGE 14 REVIEW & REAL FORMSUBMIT.CO DISPATCH TO wildkidz1001@gmail.com
+       ========================================================================= */
+    function val(id) {
+      const el = document.getElementById(id);
+      return el ? el.value.trim() : '';
+    }
+
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+
+    function buildReviewSummary() {
+      const sections = [
+        {
+          stage: 1, title: '01 — PROFILE',
+          items: [
+            ['Full Name', val('fullName')],
+            ['Preferred Name', val('preferredName')],
+            ['Age', val('age')],
+            ['Date of Birth', val('dob')],
+            ['Email Address', val('email')],
+            ['Country of Residence', val('country')],
+            ['Languages Spoken', val('languages')]
+          ]
+        },
+        {
+          stage: 2, title: '02 — CATEGORY',
+          items: [['Selected Roles', Array.from(selectedRoles).join(', ') || 'None selected']]
+        },
+        {
+          stage: 3, title: '03 — INFORMATION',
+          items: [
+            ['Previous Experience', val('prevExp')],
+            ['Practice Duration', val('practiceDuration')],
+            ['Training', val('trainingHistory')],
+            ['Performed Before', val('performedBefore')],
+            ['Strongest Skills', val('strongestSkills')],
+            ['Achievements', val('achievements') || 'None listed']
+          ]
+        },
+        {
+          stage: 4, title: '04 — ABOUT YOU',
+          items: [
+            ['Introduction', val('introSelf')],
+            ['Personality', val('personality')],
+            ['Uniqueness', val('uniqueTrait')],
+            ['Strengths', val('personalStrengths')],
+            ['Ambitions', val('ambitions')],
+            ['One Thing to Know', val('oneThing')]
+          ]
+        },
+        {
+          stage: 5, title: '05 — YOUR INTERESTS',
+          items: [
+            ['Main Interests & Hobbies', val('mainInterests')],
+            ['Free Time', val('freeTime')],
+            ['Creative Activities', val('creativeActivities')],
+            ['Creative Inspiration', val('creativeInspiration')],
+            ['Outside Passion', val('outsidePassion')],
+            ['Favourite Music Type', val('favMusicType')],
+            ['Skills to Explore', val('exploreSkills')]
+          ]
+        },
+        {
+          stage: 6, title: '06 — MUSIC PROFILE & TEST',
+          items: [
+            ['Favourite Artists', val('favArtists')],
+            ['Favourite Groups', val('favGroups')],
+            ['Genres', val('musicGenres')],
+            ['Favourite Song', val('favSong')],
+            ['Performance Style Inspiration', val('perfStyleInspo')],
+            ['Instruments', val('instruments')],
+            ['Capabilities', val('canPerform')],
+            ['Singing Test', mediaState.singing.link || mediaState.singing.fileName || 'Not provided'],
+            ['Rap Test', mediaState.rap.link || mediaState.rap.fileName || 'Not provided'],
+            ['Dance Test', mediaState.dance.link || mediaState.dance.fileName || 'Not provided'],
+            ['Other Performance Test', mediaState.other.link || mediaState.other.fileName || 'Not provided']
+          ]
+        },
+        {
+          stage: 7, title: '07 — PHYSICAL & PERSONAL DETAILS',
+          items: [
+            ['Height (cm)', val('heightCm') ? `${val('heightCm')} cm` : 'Not provided (Optional)'],
+            ['Country', val('detailCountry')],
+            ['Languages', val('detailLanguages')],
+            ['Preferred Category', val('preferredCategory')]
+          ]
+        },
+        {
+          stage: 8, title: '08 — WHY WILDKIDZ?',
+          items: [
+            ['1. Why apply for WILDKIDZ?', val('whyApply')],
+            ['2. What interested you?', val('whatInterested')],
+            ['3. Team contribution', val('teamContribution')]
+          ]
+        },
+        {
+          stage: 11, title: '11 — VISUAL SUBMISSION',
+          items: [['Profile Photograph', photoDataUrl ? `Attached (${photoEnhanced ? 'AI White Backdrop Assisted' : 'Original'})` : 'Skipped / Not provided']]
+        },
+        {
+          stage: 12, title: '12 — AVAILABILITY',
+          items: [
+            ['Time Dedication', val('timeDedication')],
+            ['Online Meetings', val('onlineMeetings')],
+            ['International Work', val('workInternational')],
+            ['Reliable Internet', val('reliableInternet')],
+            ['Parental Permission', val('parentalPermission')]
+          ]
+        }
+      ];
+
+
+      document.getElementById('reviewSummaryList').innerHTML = sections.map(sec => `
+        <div class="review-block">
+          <div class="review-head">
+            <span class="field-label" style="color:#FFFFFF;">${sec.title}</span>
+            <button type="button" class="btn-mini-glass" onclick="goToStage(${sec.stage})">EDIT SECTION</button>
+          </div>
+          ${sec.items.map(([k, v]) => `
+            <div class="review-kv">
+              <div class="review-k">${escapeHtml(k)}</div>
+              <div class="review-v">${escapeHtml(v || '—')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+
+    async function submitApplication() {
+      // Validate all required stages
+      const requiredStages = [1, 2, 3, 4, 5, 6, 7, 8, 12];
+      for (const st of requiredStages) {
+        if (!validateStage(st)) {
+          goToStage(st);
+          return;
+        }
+      }
+
+
+      if (!document.getElementById('confirmAccuracy').checked) {
+        showToast('Please confirm the accuracy and guardian consent declaration before submitting.');
+        return;
+      }
+
+
+      const btn = document.getElementById('finalSubmitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>TRANSMITTING TO WOWLD ENTERTAINMENT...</span>';
+
+
+      const refId = `WK-${Date.now().toString(36).toUpperCase()}`;
+
+
+      // Build structured FormData for FormSubmit.co -> wildkidz1001@gmail.com
+      const formData = new FormData();
+      formData.append('_subject', `WILDKIDZ Audition [${refId}] — ${val('preferredName')} (${Array.from(selectedRoles).join(', ')})`);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('Application_Reference_ID', refId);
+
+
+      // 01 Profile
+      formData.append('01_Full_Name', val('fullName'));
+      formData.append('01_Preferred_Name', val('preferredName'));
+      formData.append('01_Age', val('age'));
+      formData.append('01_Date_Of_Birth', val('dob'));
+      formData.append('01_Email_Address', val('email'));
+      formData.append('01_Country_Of_Residence', val('country'));
+      formData.append('01_Languages_Spoken', val('languages'));
+
+
+      // 02 Category
+      formData.append('02_Selected_Categories', Array.from(selectedRoles).join(', '));
+
+
+      // 03 Information
+      formData.append('03_Previous_Experience', val('prevExp'));
+      formData.append('03_Practice_Duration', val('practiceDuration'));
+      formData.append('03_Training_History', val('trainingHistory'));
+      formData.append('03_Performed_Before', val('performedBefore'));
+      formData.append('03_Strongest_Skills', val('strongestSkills'));
+      formData.append('03_Achievements', val('achievements') || 'None');
+
+
+      // 04 About You
+      formData.append('04_Introduce_Yourself', val('introSelf'));
+      formData.append('04_Personality', val('personality'));
+      formData.append('04_What_Makes_You_Unique', val('uniqueTrait'));
+      formData.append('04_Strengths', val('personalStrengths'));
+      formData.append('04_Biggest_Ambitions', val('ambitions'));
+      formData.append('04_One_Thing_To_Know', val('oneThing'));
+
+
+      // 05 Your Interests
+      formData.append('05_Main_Interests_Hobbies', val('mainInterests'));
+      formData.append('05_Free_Time', val('freeTime'));
+      formData.append('05_Creative_Activities', val('creativeActivities'));
+      formData.append('05_Creative_Inspiration', val('creativeInspiration'));
+      formData.append('05_Outside_Passion', val('outsidePassion'));
+      formData.append('05_Favourite_Music_Type', val('favMusicType'));
+      formData.append('05_Skills_To_Explore', val('exploreSkills'));
+
+
+      // 06 Music Profile & Test
+      formData.append('06_Favourite_Artists', val('favArtists'));
+      formData.append('06_Favourite_Groups', val('favGroups'));
+      formData.append('06_Music_Genres', val('musicGenres'));
+      formData.append('06_Favourite_Song', val('favSong'));
+      formData.append('06_Performance_Style_Inspiration', val('perfStyleInspo'));
+      formData.append('06_Instruments', val('instruments'));
+      formData.append('06_Can_Sing_Rap_Dance_Perform', val('canPerform'));
+      formData.append('06_Music_Test_Singing', mediaState.singing.link || mediaState.singing.fileName || 'Not submitted');
+      formData.append('06_Music_Test_Rap', mediaState.rap.link || mediaState.rap.fileName || 'Not submitted');
+      formData.append('06_Music_Test_Dance', mediaState.dance.link || mediaState.dance.fileName || 'Not submitted');
+      formData.append('06_Music_Test_Other', mediaState.other.link || mediaState.other.fileName || 'Not submitted');
+
+
+      // Attach actual uploaded media files if present
+      if (mediaState.singing.fileObj) formData.append('attachment_singing', mediaState.singing.fileObj);
+      if (mediaState.rap.fileObj) formData.append('attachment_rap', mediaState.rap.fileObj);
+      if (mediaState.dance.fileObj) formData.append('attachment_dance', mediaState.dance.fileObj);
+      if (mediaState.other.fileObj) formData.append('attachment_other', mediaState.other.fileObj);
+
+
+      const photoInput = document.getElementById('photoUploadInput');
+      if (photoInput && photoInput.files[0]) {
+        formData.append('attachment_profile_photo', photoInput.files[0]);
+      }
+
+
+      // 07 Physical & Personal Details
+      formData.append('07_Height_CM', val('heightCm') || 'Optional / Not provided');
+      formData.append('07_Country', val('detailCountry'));
+      formData.append('07_Languages', val('detailLanguages'));
+      formData.append('07_Preferred_Category', val('preferredCategory'));
+
+
+      // 08 Why WILDKIDZ?
+      formData.append('08_Why_Apply_WILDKIDZ', val('whyApply'));
+      formData.append('08_What_Interested_You', val('whatInterested'));
+      formData.append('08_Team_Contribution', val('teamContribution'));
+
+
+      // 12 Availability & Guardian Consent
+      formData.append('12_Time_Dedication', val('timeDedication'));
+      formData.append('12_Online_Meetings', val('onlineMeetings'));
+      formData.append('12_Comfortable_International', val('workInternational'));
+      formData.append('12_Reliable_Internet', val('reliableInternet'));
+      formData.append('12_Parental_Guardian_Permission', val('parentalPermission'));
+
+
+      try {
+        const response = await fetch('https://formsubmit.co/ajax/wildkidz1001@gmail.com', {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
+
+
+        const result = await response.json();
+        if (response.ok || result.success) {
+          document.getElementById('refIdDisplay').textContent = `APPLICATION REF // ${refId}`;
+          document.getElementById('reviewStageContainer').style.display = 'none';
+          document.getElementById('confirmationScreen').style.display = 'flex';
+          document.getElementById('prevBtn').style.display = 'none';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          throw new Error(result.message || 'Submission service returned an error.');
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = '<span>SUBMIT APPLICATION TO WOWLD ENTERTAINMENT</span><span>✦</span>';
+        showToast('Network issue during transmission. Please check your connection and try again, or email wildkidz1001@gmail.com.');
+      }
+    }
+
+
+    function resetAndReturnHome() {
+      document.getElementById('wildkidzForm').reset();
+      selectedRoles.clear();
+      document.querySelectorAll('.role-tile').forEach(t => t.classList.remove('selected'));
+      document.getElementById('selectedCategoryCount').textContent = '0 SELECTED';
+      ['singing', 'rap', 'dance', 'other'].forEach(clearMedia);
+      removePhoto();
+      document.getElementById('reviewStageContainer').style.display = 'flex';
+      document.getElementById('confirmationScreen').style.display = 'none';
+      const btn = document.getElementById('finalSubmitBtn');
+      btn.disabled = false;
+      btn.innerHTML = '<span>SUBMIT APPLICATION TO WOWLD ENTERTAINMENT</span><span>✦</span>';
+      goToStage(0);
+    }
+
+
+    /* =========================================================================
+       6. INTERACTIVE 3D TILT CREST & FLOATING 4-POINT CHROME/CRIMSON STARFIELD
+       ========================================================================= */
+    const crestEl = document.getElementById('tiltCrest');
+    if (crestEl) {
+      crestEl.addEventListener('mousemove', (e) => {
+        const rect = crestEl.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        crestEl.style.transform = `rotateY(${x * 18}deg) rotateX(${-y * 18}deg)`;
+      });
+      crestEl.addEventListener('mouseleave', () => {
+        crestEl.style.transform = 'rotateY(0deg) rotateX(0deg)';
+      });
+    }
+
+
+    const canvas = document.getElementById('starfieldCanvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+
+    function createStars() {
+      const count = Math.min(48, Math.floor((window.innerWidth * window.innerHeight) / 24000));
+      stars = Array.from({ length: count }, () => {
+        const isCrimson = Math.random() < 0.22;
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: 4 + Math.random() * 14,
+          vx: (Math.random() - 0.5) * 0.28,
+          vy: -0.15 - Math.random() * 0.35,
+          rot: Math.random() * Math.PI,
+          vRot: (Math.random() - 0.5) * 0.012,
+          alpha: 0.32 + Math.random() * 0.55,
+          crimson: isCrimson
+        };
+      });
+    }
+
+
+    function drawFourPointStar(cx, cy, r, rot, color, glow) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rot);
+      ctx.beginPath();
+      const inner = r * 0.2;
+      ctx.moveTo(0, -r);
+      ctx.quadraticCurveTo(inner * 0.4, -inner * 0.4, r, 0);
+      ctx.quadraticCurveTo(inner * 0.4, inner * 0.4, 0, r);
+      ctx.quadraticCurveTo(-inner * 0.4, inner * 0.4, -r, 0);
+      ctx.quadraticCurveTo(-inner * 0.4, -inner * 0.4, 0, -r);
+      ctx.closePath();
+      ctx.shadowBlur = 14;
+      ctx.shadowColor = glow;
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.restore();
+    }
+
+
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of stars) {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.rot += s.vRot;
+        if (s.y < -30) {
+          s.y = canvas.height + 30;
+          s.x = Math.random() * canvas.width;
+        }
+        if (s.x < -30) s.x = canvas.width + 30;
+        if (s.x > canvas.width + 30) s.x = -30;
+
+
+        const fill = s.crimson
+          ? `rgba(225, 29, 72, ${s.alpha})`
+          : `rgba(226, 232, 240, ${s.alpha})`;
+        const glow = s.crimson
+          ? 'rgba(225, 29, 72, 0.55)'
+          : 'rgba(255, 255, 255, 0.38)';
+        drawFourPointStar(s.x, s.y, s.size, s.rot, fill, glow);
+      }
+      requestAnimationFrame(animateStars);
+    }
+
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createStars();
+    });
+
+
+    resizeCanvas();
+    createStars();
+    animateStars();
+    initPortal();
+  </script>
+</body>
+</html>
